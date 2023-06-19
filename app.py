@@ -6,10 +6,12 @@ app = Flask(__name__)
 
 @app.route('/')
 def homePage():
+   #top: its pretty
    text = ""
    text += '<h1 style=color:#75dae6;font-size:80px;background-color:#4d4d4d;text-align:center>Welcome</h1>'
    text += '<p style=color:#098491;font-size:30px>Info about this thing goes here :)</p>'
    text += '<h2>log your work time!</h2>'
+   #this is the form, gets some data
    text += """<form method=POST action=/log> 
    <br>
    Project name: <input name=projName> 
@@ -28,8 +30,13 @@ def homePage():
    <input type=submit>
    </form>
    """
+   #the form is over now
 
-   
+   #lets print the data!
+   with open('log.txt', 'r') as f:
+      contents = f.read()
+      text += f'<pre>{contents} </pre>'
+
    return text
 
 @app.route('/log', methods=['POST'])
