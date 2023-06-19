@@ -34,8 +34,39 @@ def homePage():
 
    #lets print the data!
    with open('log.txt', 'r') as f:
+      workTimeTotal = 0
       contents = f.read()
       text += f'<pre>{contents} </pre>'
+      lines = contents.split('\n')
+      for line in lines:
+         if line == '':
+            continue
+         dataVals = line.split(';;')
+         if dataVals[1] == 'Start':
+            #record most recent start of work
+            begun = float(dataVals[4])
+            currPercent = int(dataVals[2])
+         if dataVals[1] == 'Break':
+            #stop adding time
+            pause = float(dataVals[4])
+            timeDiff = (pause - begun) 
+            workTimeTotal += timeDiff
+            currPercent = int(dataVals[2])
+         if dataVals[1] == 'Stop':
+            #stop adding time
+            endTemp = float(dataVals[4])
+            timeDiff = (endTemp - begun) 
+            workTimeTotal += timeDiff
+            currPercent = int(dataVals[2])
+         if dataVals[1] == 'Update':
+            currPercent = int(dataVals[2])
+      workTimeProjected = workTimeTotal/(currPercent/100)
+      workTimeLeft = workTimeProjected - workTimeTotal
+
+
+      text += f'Work time so far in hours: {(workTimeTotal/3600):.2f}'
+      text += f'<br>Total hours to complete full project: {(workTimeProjected/3600):.2f}<br>Hours left till completion: {(workTimeLeft/3600):.2f}'
+
 
    return text
 
